@@ -1,4 +1,94 @@
-ninja_access
-============
+= NinjaAccess
 
-Gem plugin providing a way to manage access to resources at a granular level through user groups
+This gemmable plugin is used to add granular permissions to your existing
+ActiveRecord models via the 'acts_as_ninja_accessible' class method.
+
+The gem adds models and behaviour that allow you to group users who share a
+particular permission set.
+
+To enable this your app must have a User model.
+
+Your app will need to grant permissions for your individual models
+instances to control who can view, edit, destroy or extend them.
+
+These permissions can be granted to individual users or groups, and this process is facilitated
+by the instance methods that are dynamically added to your models through this plugin.
+
+Each instance of your ninja_accessible model will have the following instance methods available:
+
+#is_viewable_by?(user)
+#is_editable_by?(user)
+#is_deleteable_by?(user)
+#is_extendable_by?(user)
+
+Deciding how and when your ninja_accessible instance has permissions granted is up to you.
+For example, you may chose to set these permission on creation of the instance, or at some other
+point in the future.  This gem does not concern itself with when or why instances should be
+accessible to different users, however, the plugin does offer a set of methods that should be used
+when you want to set permissions on your instance:
+
+#grant_access_to_group(action, group)
+  - action is a symbol defining one of the pre-defined supported actions (i.e. :view, :edit, :delete, :extend)
+  - group is the instance of NinjaAccess::Group to which you want to grant this particular permission
+
+#grant_access_to_groups(action, groups)
+  - action is a symbol defining one of the pre-defined supported actions (i.e. :view, :edit, :delete, :extend)
+  - groups is an iterable collection of the NinjaAccess::Group instances, to whom you want to grant this particular permission
+
+#grant_access_to_user(action, group)
+  - action is a symbol defining one of the pre-defined supported actions (i.e. :view, :edit, :delete, :extend)
+  - user is the instance of your User class to which you want to grant this particular permission
+
+#grant_access_to_users(action, group)
+  - action is a symbol defining one of the pre-defined supported actions (i.e. :view, :edit, :delete, :extend)
+  - user is an iterable collection of the User instances to whom you want to grant this particular permission
+
+All of these methods will create the necessary NinjaAcess::Permission instance if it does not exist.
+However, there is also a method to facilitate the explicit creation of permissions for your accessible model
+instance:
+
+#create_view_permission
+#create_edit_permission
+#create_delete_permission
+#create_extend_permission
+
+
+The following scopes are added to your existing model:
+
+viewable_by(user) - Scope defining all instances of this model that have a view permission which is available to the specified user
+editable_by(user) - Scope defining all instances of this model that have an edit permission which is available to the specified user
+deleteable_by(user) - Scope defining all instances of this model that have a delete permission which is available to the specified user
+extendable_by(user) - Scope defining all instances of this model that have an extend permission which is available to the specified user
+
+
+== Getting started
+
+Add the gem to your gemfile
+
+gem 'ninja_access'
+
+Run the generator to install the necessary migrations and create an initializer.
+
+rails g ninja_access:install
+
+Run your migrations so the DB changes are applied
+
+rake db:migrate
+
+Chose those models whose access you wish to restrict and add the following
+
+class Resource < ActiveRecord::Base
+  ...
+  acts_as_ninja_accessible
+  ...
+end
+
+== Getting started with development (i.e. running tests)
+
+1. Clone the repo from GitHub git@github.com:ExamTime/ninja_access.git
+2. cd ninja_access
+3. bundle install --binstubs
+4. cd spec/dummy
+5. rake db:create && rake db:migrate && rake db:test:prepare
+6. cd ../..
+7. bundle exec guard
