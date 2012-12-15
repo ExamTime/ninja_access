@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121209195943) do
+ActiveRecord::Schema.define(:version => 20121215110421) do
 
   create_table "ninja_access_groups", :force => true do |t|
     t.string   "name"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20121209195943) do
     t.integer "permission_id"
   end
 
-  add_index "ninja_access_groups_permissions", ["group_id"], :name => "ninja_access_groups_permissions_group_id_fk"
+  add_index "ninja_access_groups_permissions", ["group_id", "permission_id"], :name => "index_na_groups_permissions_on_group_id_and_permission_id", :unique => true
   add_index "ninja_access_groups_permissions", ["permission_id"], :name => "ninja_access_groups_permissions_permission_id_fk"
 
   create_table "ninja_access_groups_users", :force => true do |t|
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(:version => 20121209195943) do
     t.integer "user_id"
   end
 
-  add_index "ninja_access_groups_users", ["group_id"], :name => "ninja_access_groups_users_group_id_fk"
+  add_index "ninja_access_groups_users", ["group_id", "user_id"], :name => "index_na_groups_users_on_group_id_and_user_id", :unique => true
   add_index "ninja_access_groups_users", ["user_id"], :name => "ninja_access_groups_users_user_id_fk"
 
   create_table "ninja_access_permissions", :force => true do |t|
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(:version => 20121209195943) do
     t.datetime "updated_at",      :null => false
   end
 
-  add_index "ninja_access_permissions", ["accessible_id", "accessible_type", "action"], :name => "index_ninja_access_permissions_on_accessible_and_action", :unique => true
+  add_index "ninja_access_permissions", ["accessible_id", "accessible_type", "action"], :name => "index_na_permissions_on_accessible_and_action", :unique => true
 
   create_table "ninja_access_sub_groups", :force => true do |t|
     t.integer  "parent_id",  :null => false
@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(:version => 20121209195943) do
   end
 
   add_index "ninja_access_users_permissions", ["permission_id"], :name => "ninja_access_users_permissions_permission_id_fk"
-  add_index "ninja_access_users_permissions", ["user_id"], :name => "ninja_access_users_permissions_user_id_fk"
+  add_index "ninja_access_users_permissions", ["user_id", "permission_id"], :name => "index_na_users_permissions_on_user_id_and_permission_id", :unique => true
 
   create_table "resource_as", :force => true do |t|
     t.string   "name"
@@ -76,12 +76,6 @@ ActiveRecord::Schema.define(:version => 20121209195943) do
   end
 
   create_table "resource_cs", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "resources", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false

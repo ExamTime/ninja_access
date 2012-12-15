@@ -2,4 +2,4 @@ en:
   ninja_access:
     error:
       message:
-        action_not_supported: "Permission for %{action} action is not supported"
+        action_not_supported: "Permission for '%{action}' action is not supported"
