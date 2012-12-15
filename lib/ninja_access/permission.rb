@@ -16,8 +16,8 @@ class NinjaAccess::Permission < ActiveRecord::Base
 
   validates_presence_of :accessible
   validates_presence_of :action
-  validates_inclusion_of :action, :in => NinjaAccess.supported_actions.map{|a| a.to_s}
   validates_uniqueness_of :action, :scope => [:accessible_type, :accessible_id]
+  validate :action_is_supported?
 
   belongs_to :accessible, :polymorphic => true
   has_and_belongs_to_many :users,
@@ -33,5 +33,17 @@ class NinjaAccess::Permission < ActiveRecord::Base
   NinjaAccess::supported_actions.each do |supported_action|
     scope_name = "#{supported_action}able".to_sym
     scope scope_name, lambda { actionable(supported_action) }
+  end
+
+  def self.supported_actions
+    NinjaAccess.supported_actions.map{|a| a.to_s}
+  end
+
+  private
+
+  def action_is_supported?
+    unless NinjaAccess::Permission::supported_actions.include?(action)
+      self.errors.add :action, I18n.t("ninja_access.error.message.action_not_supported", :action => action)
+    end
   end
 end

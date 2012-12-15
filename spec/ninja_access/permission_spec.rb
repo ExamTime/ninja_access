@@ -24,8 +24,17 @@ describe NinjaAccess::Permission do
     end
 
     [:view, "nuke", "inflate", "$%^", ""].each do |unsupported_action|
-      it "should be invalid when the action is '#{unsupported_action}'" do
-        build(:ninja_access_permission, :action => unsupported_action).should_not be_valid
+      context "when action is '#{unsupported_action}'" do
+        it "should be invalid" do
+          build(:ninja_access_permission, :action => unsupported_action).should_not be_valid
+        end
+
+        error_msg = I18n.t("ninja_access.error.message.action_not_supported", :action => unsupported_action)
+        it "should have an error message of '#{error_msg}'" do
+          p = build(:ninja_access_permission, :action => unsupported_action)
+          p.should_not be_valid
+          p.errors[:action].should include error_msg
+        end
       end
     end
   end

@@ -21,6 +21,7 @@ module NinjaAccess
         migration_template "create_ninja_access_permissions.rb", "db/migrate/create_ninja_access_permissions.rb"
         migration_template "create_ninja_access_sub_groups.rb", "db/migrate/create_ninja_access_sub_groups.rb"
         template "ninja_access.rb", "config/initializers/ninja_access.rb"
+        template "ninja_access.en.yml", "config/locales/ninja_access.en.yml"
       end
     end
   end
