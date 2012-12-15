@@ -11,7 +11,7 @@
 # the users of the child group automatically inherit the permissions of this group.
 #
 class NinjaAccess::Group < ActiveRecord::Base
-  # Each group is created with a name which should be unique
+  # Each group is created with a name - uniqueness of this name is not enforced
   attr_accessible :name
 
   validates_presence_of :name
