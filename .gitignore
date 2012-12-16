@@ -1,2 +1,3 @@
 .bundle
 spec/dummy/log/*
+tmp/*
