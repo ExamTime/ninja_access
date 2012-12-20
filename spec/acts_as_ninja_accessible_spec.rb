@@ -83,11 +83,14 @@ describe NinjaAccess::ActsAsNinjaAccessible do
 
         NinjaAccess.supported_actions.each do |supported_action|
           describe "for an action of '#{supported_action}'" do
-            it "should add '#{supported_action}' permission to the appropriate group" do
+            it "should add and remove '#{supported_action}' permission to the appropriate group" do
               group.permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 0
               resource.grant_permission_to_group(supported_action, group)
               group.permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 1
+              resource.revoke_permission_from_group(supported_action, group)
+              group.permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 0
             end
+
             it "should not add '#{supported_action}' permission twice to the appropriate group" do
               group.permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 0
               resource.grant_permission_to_group(supported_action, group)
@@ -105,10 +108,12 @@ describe NinjaAccess::ActsAsNinjaAccessible do
       describe "#grant_permission_to_user" do
         NinjaAccess.supported_actions.each do |supported_action|
           describe "for an action of '#{supported_action}'" do
-            it "should add '#{supported_action}' permission to the appropriate user" do
+            it "should add and remove '#{supported_action}' permission to the appropriate user" do
               user.ninja_access_permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 0
               resource.grant_permission_to_user(supported_action, user)
               user.ninja_access_permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 1
+              resource.revoke_permission_from_user(supported_action, user)
+              user.ninja_access_permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 0
             end
             it "should not add '#{supported_action}' permission twice to the appropriate user" do
               user.ninja_access_permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 0
@@ -134,11 +139,12 @@ describe NinjaAccess::ActsAsNinjaAccessible do
         end
       end
 
-      it "should include method '#grant_permission_to_users'" do
-        resource.should respond_to(:grant_permission_to_users)
-      end
-
       describe "#grant_permission_to_users" do
+
+        it "should include method '#grant_permission_to_users'" do
+          resource.should respond_to(:grant_permission_to_users)
+        end
+
         it "should issue #grant_permission_to_user for each user passed" do
           user_a = double("user_a")
           user_b = double("user_b")
@@ -147,6 +153,40 @@ describe NinjaAccess::ActsAsNinjaAccessible do
           resource.grant_permission_to_users("test", [user_a, user_b])
         end
       end
+
+      describe "#revoke_permission_from_users" do
+        it "should include method '#revoke_permission_from_users'" do
+          resource.should respond_to(:revoke_permission_from_users)
+        end
+
+        describe "#revoke_permission_from_users" do
+          it "should issue #revoke_permission_from_user for each user passed" do
+            user_a = double("user_a")
+            user_b = double("user_b")
+            resource.should_receive(:revoke_permission_from_user).with("test", user_a)
+            resource.should_receive(:revoke_permission_from_user).with("test", user_b)
+            resource.revoke_permission_from_users("test", [user_a, user_b])
+          end
+        end
+      end
+
+      describe "#revoke_permission_from_groups" do
+        it "should include method '#revoke_permission_from_groups'" do
+          resource.should respond_to(:revoke_permission_from_groups)
+        end
+
+        describe "#revoke_permission_from_groups" do
+          it "should issue #revoke_permission_from_group for each user passed" do
+            user_a = double("user_a")
+            user_b = double("user_b")
+            resource.should_receive(:revoke_permission_from_group).with("test", user_a)
+            resource.should_receive(:revoke_permission_from_group).with("test", user_b)
+            resource.revoke_permission_from_groups("test", [user_a, user_b])
+          end
+        end
+      end
+
+
     end
 
   end

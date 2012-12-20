@@ -67,6 +67,28 @@ module NinjaAccess::ActsAsNinjaAccessible
       users.each { |u| grant_permission_to_user(action, u) }
     end
 
+    def revoke_permission_from_group(action, group)
+      action = action.to_s
+      permission = get_my_permission_for_action(action)
+      permission.groups.delete group
+      permission.save!
+    end
+
+    def revoke_permission_from_groups(action, groups)
+      groups.each { |g| revoke_permission_from_group(action, g) }
+    end
+
+    def revoke_permission_from_user(action, user)
+      action = action.to_s
+      permission = get_my_permission_for_action(action)
+      permission.users.delete user
+      permission.save!
+    end
+
+    def revoke_permission_from_users(action, users)
+      users.each { |u| revoke_permission_from_user(action, u) }
+    end
+
     NinjaAccess::supported_actions.each do |supported_action|
       create_method_name = "create_#{supported_action}_permission".to_sym
       define_method create_method_name do
