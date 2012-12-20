@@ -1,3 +1,4 @@
 .bundle
 spec/dummy/log/*
 tmp/*
+nbproject/*
