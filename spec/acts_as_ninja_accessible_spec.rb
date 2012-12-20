@@ -88,6 +88,12 @@ describe NinjaAccess::ActsAsNinjaAccessible do
               resource.grant_permission_to_group(supported_action, group)
               group.permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 1
             end
+            it "should not add '#{supported_action}' permission twice to the appropriate group" do
+              group.permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 0
+              resource.grant_permission_to_group(supported_action, group)
+              resource.grant_permission_to_group(supported_action, group)
+              group.permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 1
+            end
           end
         end
       end
@@ -101,6 +107,12 @@ describe NinjaAccess::ActsAsNinjaAccessible do
           describe "for an action of '#{supported_action}'" do
             it "should add '#{supported_action}' permission to the appropriate user" do
               user.ninja_access_permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 0
+              resource.grant_permission_to_user(supported_action, user)
+              user.ninja_access_permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 1
+            end
+            it "should not add '#{supported_action}' permission twice to the appropriate user" do
+              user.ninja_access_permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 0
+              resource.grant_permission_to_user(supported_action, user)
               resource.grant_permission_to_user(supported_action, user)
               user.ninja_access_permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 1
             end

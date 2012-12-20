@@ -48,7 +48,7 @@ module NinjaAccess::ActsAsNinjaAccessible
     def grant_permission_to_group(action, group)
       action = action.to_s
       permission = get_my_permission_for_action(action)
-      permission.groups << group
+      permission.groups << group if not permission.groups.include?(group)
       permission.save!
     end
 
@@ -59,7 +59,7 @@ module NinjaAccess::ActsAsNinjaAccessible
     def grant_permission_to_user(action, user)
       action = action.to_s
       permission = get_my_permission_for_action(action)
-      permission.users << user
+      permission.users << user if not permission.users.include?(user)
       permission.save!
     end
 
