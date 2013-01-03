@@ -8,9 +8,10 @@ describe NinjaAccess::ActsAsNinjaAccessible do
 
     describe "class methods" do
       NinjaAccess::supported_actions.each do |supported_action|
-        scope_name = "#{supported_action}able_by".to_sym
-        it "should include class method '#{scope_name}'" do
-          ResourceA.should respond_to(scope_name)
+        ["#{supported_action}able_by".to_sym, "#{supported_action}able_by_group".to_sym].each do |scope_name|
+          it "should include class method '#{scope_name}'" do
+            ResourceA.should respond_to(scope_name)
+          end
         end
       end
     end
@@ -18,6 +19,8 @@ describe NinjaAccess::ActsAsNinjaAccessible do
     describe "instance methods" do
       let(:user) { u = User.new; u.save!; u }
       let(:user_no_access) { u = User.new; u.save!; u }
+      let(:group) { create(:ninja_access_group) }
+      let(:group_no_access) { create(:ninja_access_group) }
 
       [:permissions].each do |method|
         it "should include method '##{method}'" do
@@ -28,6 +31,7 @@ describe NinjaAccess::ActsAsNinjaAccessible do
       NinjaAccess::supported_actions.each do |supported_action|
         # Check for presence of boolean is_actionable_by? methods
         method_name = "is_#{supported_action}able_by?".to_sym
+
         it "should include method '##{method_name}'" do
           resource.should respond_to(method_name)
         end
@@ -47,6 +51,32 @@ describe NinjaAccess::ActsAsNinjaAccessible do
           end
 
         end
+
+        # Check for presence of boolean is_actionable_by_group? methods
+        method_name_group = "is_#{supported_action}able_by_group?".to_sym
+
+        it "should include method '##{method_name_group}'" do
+          resource.should respond_to(method_name_group)
+        end
+
+        describe "##{method_name_group}" do
+          before :all do
+            resource.permissions.delete_all
+            resource.grant_permission_to_group(supported_action, group)
+            resource.reload
+          end
+
+          it "should return true if the user has the permission to #{supported_action} the resource" do
+            resource.send(method_name_group, group).should be_true
+          end
+
+          it "should return false if the user does not have the permission to #{supported_action} the resource" do
+            resource.send(method_name_group, group_no_access).should be_false
+          end
+
+        end
+
+
 
         # Check for presence of methods to create permissions for this instance
         create_method_name = "create_#{supported_action}_permission".to_sym
@@ -196,9 +226,10 @@ describe NinjaAccess::ActsAsNinjaAccessible do
 
     describe "class methods" do
       NinjaAccess::supported_actions.each do |supported_action|
-        scope_name = "#{supported_action}able_by".to_sym
-        it "should not include class method '#{scope_name}'" do
-          ResourceC.should_not respond_to(scope_name)
+        ["#{supported_action}able_by".to_sym, "#{supported_action}able_by".to_sym].each do |scope_name|
+          it "should not include class method '#{scope_name}'" do
+            ResourceC.should_not respond_to(scope_name)
+          end
         end
       end
     end
@@ -212,9 +243,10 @@ describe NinjaAccess::ActsAsNinjaAccessible do
 
       NinjaAccess::supported_actions.each do |supported_action|
         # Check for absence of boolean is_actionable_by? methods
-        method_name = "is_#{supported_action}able_by?".to_sym
-        it "should not include method '##{method_name}'" do
-          no_access_resource.should_not respond_to(method_name)
+        ["is_#{supported_action}able_by?".to_sym, "is_#{supported_action}able_by_group?".to_sym].each do |method_name|
+          it "should not include method '##{method_name}'" do
+            no_access_resource.should_not respond_to(method_name)
+          end
         end
 
         # Check for absence of methods to create permissions for this instance

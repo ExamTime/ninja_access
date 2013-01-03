@@ -33,6 +33,21 @@ module NinjaAccess::ActsAsNinjaAccessible
            OR #{user.id} IN (#{NinjaAccess.query_for_super_user_ids})")
         .uniq
       }
+
+
+      scope_name = "#{supported_action}able_by_group".to_sym
+      scope scope_name, lambda { |group|
+        joins("INNER JOIN ninja_access_permissions ON (ninja_access_permissions.accessible_id = #{table_name}.id
+                                                     AND ninja_access_permissions.accessible_type = '#{self.to_s}')
+           INNER JOIN ninja_access_groups_permissions ON (ninja_access_permissions.id = ninja_access_groups_permissions.permission_id)
+           INNER JOIN ninja_access_groups AS direct_groups ON (ninja_access_groups_permissions.group_id = direct_groups.id)
+          ")
+        .where("
+           ninja_access_permissions.action = '#{supported_action}'
+           AND direct_groups.id = #{group.id}")
+        .uniq
+      }
+
     end
   end
 
@@ -42,6 +57,12 @@ module NinjaAccess::ActsAsNinjaAccessible
       instance_method_name = "is_#{scope_name}?".to_sym
       define_method instance_method_name do |user|
         klazz.send(scope_name, user).include?(self)
+      end
+
+      scope_name_group = "#{supported_action}able_by_group".to_sym
+      instance_method_name_group = "is_#{scope_name_group}?".to_sym
+      define_method instance_method_name_group do |user|
+        klazz.send(scope_name_group, user).include?(self)
       end
     end
 
