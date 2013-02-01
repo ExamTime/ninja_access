@@ -52,6 +52,23 @@ instance:
   -create_delete_permission
   -create_extend_permission
 
+Complementing the methods above, a ninja accessible model will also be able to revoke permissions from users and groups.
+
+  -revoke_permission_from_group(action, group)
+    *action is a symbol defining one of the pre-defined supported actions (i.e. :view, :edit, :delete, :extend)
+    *group is the instance of NinjaAccess::Group from which you want to revoke this particular permission
+
+  -revoke_permission_to_groups(action, groups)
+    *action is a symbol defining one of the pre-defined supported actions (i.e. :view, :edit, :delete, :extend)
+    *groups is an iterable collection of the NinjaAccess::Group instances, from whom you want to revoke this particular permission
+
+  -revoke_permission_to_user(action, user)
+    *action is a symbol defining one of the pre-defined supported actions (i.e. :view, :edit, :delete, :extend)
+    *user is the instance of your User class from which you want to revoke this particular permission
+
+  -revoke_permission_to_users(action, users)
+    *action is a symbol defining one of the pre-defined supported actions (i.e. :view, :edit, :delete, :extend)
+    *user is an iterable collection of the User instances from whom you want to revoke this particular permission
 
 The following scopes are added to your existing model:
 
