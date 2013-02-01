@@ -77,6 +77,7 @@ The following scopes are added to your existing model:
   -deleteable_by(user) - Scope defining all instances of this model that have a delete permission which is available to the specified user
   -extendable_by(user) - Scope defining all instances of this model that have an extend permission which is available to the specified user
 
+There is also an equivalent set of scopes defined for group access, e.g. viewable_by_group(group).
 
 == Getting started
 
