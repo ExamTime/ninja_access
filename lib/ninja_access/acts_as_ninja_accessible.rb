@@ -61,8 +61,8 @@ module NinjaAccess::ActsAsNinjaAccessible
 
       scope_name_group = "#{supported_action}able_by_group".to_sym
       instance_method_name_group = "is_#{scope_name_group}?".to_sym
-      define_method instance_method_name_group do |user|
-        klazz.send(scope_name_group, user).include?(self)
+      define_method instance_method_name_group do |group|
+        klazz.send(scope_name_group, group).include?(self)
       end
     end
 
