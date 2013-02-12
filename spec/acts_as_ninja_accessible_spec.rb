@@ -42,6 +42,10 @@ describe NinjaAccess::ActsAsNinjaAccessible do
             resource.grant_permission_to_user(supported_action, user)
           end
 
+          it "should return false if the user is nil" do
+            resource.send(method_name, nil).should be_false
+          end
+
           it "should return true if the user has the permission to #{supported_action} the resource" do
             resource.send(method_name, user).should be_true
           end
@@ -66,11 +70,15 @@ describe NinjaAccess::ActsAsNinjaAccessible do
             resource.reload
           end
 
-          it "should return true if the user has the permission to #{supported_action} the resource" do
+          it "should return false if the group is nil" do
+            resource.send(method_name_group, nil).should be_false
+          end
+
+          it "should return true if the group has the permission to #{supported_action} the resource" do
             resource.send(method_name_group, group).should be_true
           end
 
-          it "should return false if the user does not have the permission to #{supported_action} the resource" do
+          it "should return false if the group does not have the permission to #{supported_action} the resource" do
             resource.send(method_name_group, group_no_access).should be_false
           end
 
