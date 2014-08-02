@@ -6,10 +6,6 @@
 #
 #  Any user of the group assumes all the permissions granted to the group.
 #
-# In addition, a group can contain other groups (children), through the sub_groups
-# association.  The idea is that once a child group is added to a group, then all
-# the users of the child group automatically inherit the permissions of this group.
-#
 class NinjaAccess::Group < ActiveRecord::Base
   # Each group is created with a name - uniqueness of this name is not enforced
   attr_accessible :name
@@ -22,26 +18,6 @@ class NinjaAccess::Group < ActiveRecord::Base
   has_and_belongs_to_many :permissions,
                           :class_name => "NinjaAccess::Permission",
                           :join_table => "ninja_access_groups_permissions"
-
-  has_many :sub_groups,
-           :class_name => "NinjaAccess::SubGroup",
-           :foreign_key => :parent_id,
-           :inverse_of => :parent,
-           :dependent => :destroy
-
-  has_many :children, :through => :sub_groups
-
-  # Add a child group to the present group
-  #
-  # Users of this class can add child groups to an existing group using this method.
-  #   * group represents the instance of NinjaAccess::Group that you want to add as
-  #     a child group to the current instance
-  def add_child_group(group)
-    return true if self.children.include?(group)
-    sub_group = self.sub_groups.build
-    sub_group.child = group
-    self.save!
-  end
 
   # Add a user to the present group
   #

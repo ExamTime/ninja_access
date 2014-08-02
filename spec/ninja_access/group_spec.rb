@@ -11,30 +11,9 @@ describe NinjaAccess::Group do
   context "instance methods" do
     let(:group) { build(:ninja_access_group) }
 
-    [:users, :permissions, :sub_groups, :children].each do |association|
+    [:users, :permissions].each do |association|
       it "should include '#{association}'" do
         group.should respond_to(association)
-      end
-    end
-
-    it "should include 'add_child_group'" do
-      group.should respond_to(:add_child_group)
-    end
-
-    describe "#add_child_group" do
-      it "should add a group to the children if it is not already present" do
-        child_group = build(:ninja_access_group)
-        initial_count = group.children.size
-        group.add_child_group(child_group)
-        group.children.size.should eq(initial_count+1)
-      end
-
-      it "should silently execute a no-op if the group is already one of the children" do
-        child_group = build(:ninja_access_group)
-        group.add_child_group(child_group)
-        initial_count = group.children.size
-        group.add_child_group(child_group)
-        group.children.size.should eq(initial_count)
       end
     end
 
