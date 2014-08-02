@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ninja_access (0.0.1)
+    ninja_access (0.0.2)
       foreigner
       rails (~> 3.2.8)
 
