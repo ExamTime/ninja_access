@@ -92,11 +92,11 @@ rake db:migrate
 
 Chose those models whose access you wish to restrict and add the following
 
-class Resource < ActiveRecord::Base
-  ...
-  acts_as_ninja_accessible
-  ...
-end
+  class Resource < ActiveRecord::Base
+    ...
+    acts_as_ninja_accessible
+    ...
+  end
 
 == Getting started with development (i.e. running tests)
 
@@ -107,3 +107,24 @@ end
   5. rake db:create && rake db:migrate && rake db:test:prepare
   6. cd ../..
   7. bundle exec guard
+
+
+== Version upgrade notes (ninja_access_slim)
+
+A separate branch was created named :ninja_access_slim.  This branch contains v0.0.2
+of the gem.  The aim of these changes was to completely strip out aspects of the
+permission system that are not being explicitly used in the ExamTime project. Namely:
+  1. Removing sub groups as these are an unused
+  2. Removing individual user permissions (permissions now only granted through groups)
+  3. Omit the 'superuser' condition from SELECT, unless it is defined by the host project.
+
+The combination of these three (unused) complications were having a detrimental effect
+on the Resource#<action>able_by(user) scopes.
+
+For projects running on version v0.0.1 you can upgrade to this version by running the 'slim
+down' generator:
+
+>> bundle exec rails g ninja_access:slim_down
+
+For a first-time install of the gem, you can continue to run the install generator as
+detailed above.
