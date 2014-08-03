@@ -5,21 +5,59 @@ describe NinjaAccess::ActsAsNinjaAccessible do
   describe "where class has been marked as 'acts_as_ninja_accessible'" do
 
     let(:resource) { ResourceA.new(:name => "resource") }
+    let(:user) { u = User.new; u.save!; u }
+    let(:superuser) { u = User.new; u.save!; u }
+    let(:group) { g = create(:ninja_access_group); g.add_user(user); g }
+
 
     describe "class methods" do
+      before :each do
+        NinjaAccess::query_for_super_user_ids = nil
+      end
+
       NinjaAccess::supported_actions.each do |supported_action|
         ["#{supported_action}able_by".to_sym, "#{supported_action}able_by_group".to_sym].each do |scope_name|
           it "should include class method '#{scope_name}'" do
             ResourceA.should respond_to(scope_name)
           end
         end
+
+        describe "##{supported_action}able_by" do
+          it "should return any resources that are #{supported_action}able by the user passed" do
+            resource = ResourceA.create(name: 'test with access')
+            resource.grant_permission_to_group(supported_action, group)
+            expect(ResourceA.send("#{supported_action}able_by", user)).to include resource
+          end
+
+          it "should not return any resources that are not #{supported_action}able by the user passed" do
+            resource = ResourceA.create(name: 'test with no access')
+            expect(ResourceA.send("#{supported_action}able_by", user)).not_to include resource
+          end
+
+          it "should return any resources it the user is a superuser" do
+            NinjaAccess::query_for_super_user_ids = "SELECT #{superuser.id} FROM DUAL"
+            resource = ResourceA.create(name: 'test with no access')
+            expect(ResourceA.send("#{supported_action}able_by", superuser)).to include resource
+          end
+        end
+
+        describe "##{supported_action}able_by_group" do
+          it "should return any resources that are #{supported_action}able by the group passed" do
+            resource = ResourceA.create(name: 'test with access')
+            resource.grant_permission_to_group(supported_action, group)
+            expect(ResourceA.send("#{supported_action}able_by_group", group)).to include resource
+          end
+
+          it "should not return any resources that are not #{supported_action}able by the user passed" do
+            resource = ResourceA.create(name: 'test with access')
+            expect(ResourceA.send("#{supported_action}able_by_group", group)).not_to include resource
+          end
+        end
       end
     end
 
     describe "instance methods" do
-      let(:user) { u = User.new; u.save!; u }
       let(:user_no_access) { u = User.new; u.save!; u }
-      let(:group) { create(:ninja_access_group) }
       let(:group_no_access) { create(:ninja_access_group) }
 
       [:permissions].each do |method|

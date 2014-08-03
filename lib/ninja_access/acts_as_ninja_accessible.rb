@@ -11,7 +11,7 @@ module NinjaAccess::ActsAsNinjaAccessible
       scope_name = "#{supported_action}able_by".to_sym
       scope scope_name, lambda { |user|
         join_sql = <<-HERE
-          INNER JOIN ninja_access_permissions ON (ninja_access_permissions.accessible_id = #{table_name}.id
+          LEFT JOIN ninja_access_permissions ON (ninja_access_permissions.accessible_id = #{table_name}.id
                                                   AND ninja_access_permissions.accessible_type = '#{self.to_s}')
           LEFT JOIN ninja_access_groups_permissions ON (ninja_access_permissions.id = ninja_access_groups_permissions.permission_id)
           LEFT JOIN ninja_access_groups AS groups ON (ninja_access_groups_permissions.group_id = groups.id)
@@ -19,10 +19,13 @@ module NinjaAccess::ActsAsNinjaAccessible
         HERE
 
         where_sql = <<-HERE
-          ninja_access_permissions.action = '#{supported_action}'
-          AND users.user_id = #{user.id}
-          OR #{user.id} IN (#{NinjaAccess.query_for_super_user_ids})
+          ( ninja_access_permissions.action = '#{supported_action}'
+            AND users.user_id = #{user.id} )
         HERE
+
+        if NinjaAccess::query_for_super_user_ids
+          where_sql += " OR #{user.id} IN (#{NinjaAccess.query_for_super_user_ids}) " 
+        end
 
         joins(join_sql).where(where_sql).uniq
       }
