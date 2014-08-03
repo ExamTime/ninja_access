@@ -19,6 +19,7 @@ module NinjaAccess
 
       def copy_migrations
         migration_template "drop_ninja_access_sub_groups.rb", "db/migrate/drop_ninja_access_sub_groups.rb"
+        migration_template "drop_ninja_access_users_permissions.rb", "db/migrate/drop_ninja_access_users_permissions.rb"
       end
     end
   end

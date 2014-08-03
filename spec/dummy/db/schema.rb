@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140802124117) do
+ActiveRecord::Schema.define(:version => 20140803142052) do
 
   create_table "ninja_access_groups", :force => true do |t|
     t.string   "name"
@@ -45,14 +45,6 @@ ActiveRecord::Schema.define(:version => 20140802124117) do
 
   add_index "ninja_access_permissions", ["accessible_id", "accessible_type", "action"], :name => "index_na_permissions_on_accessible_and_action", :unique => true
 
-  create_table "ninja_access_users_permissions", :force => true do |t|
-    t.integer "user_id"
-    t.integer "permission_id"
-  end
-
-  add_index "ninja_access_users_permissions", ["permission_id"], :name => "ninja_access_users_permissions_permission_id_fk"
-  add_index "ninja_access_users_permissions", ["user_id", "permission_id"], :name => "index_na_users_permissions_on_user_id_and_permission_id", :unique => true
-
   create_table "resource_as", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
@@ -81,8 +73,5 @@ ActiveRecord::Schema.define(:version => 20140802124117) do
 
   add_foreign_key "ninja_access_groups_users", "ninja_access_groups", :name => "ninja_access_groups_users_group_id_fk", :column => "group_id"
   add_foreign_key "ninja_access_groups_users", "users", :name => "ninja_access_groups_users_user_id_fk"
-
-  add_foreign_key "ninja_access_users_permissions", "ninja_access_permissions", :name => "ninja_access_users_permissions_permission_id_fk", :column => "permission_id"
-  add_foreign_key "ninja_access_users_permissions", "users", :name => "ninja_access_users_permissions_user_id_fk"
 
 end

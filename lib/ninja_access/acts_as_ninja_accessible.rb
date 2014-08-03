@@ -13,9 +13,6 @@ module NinjaAccess::ActsAsNinjaAccessible
         join_sql = <<-HERE
           INNER JOIN ninja_access_permissions ON (ninja_access_permissions.accessible_id = #{table_name}.id
                                                   AND ninja_access_permissions.accessible_type = '#{self.to_s}')
-
-          LEFT JOIN ninja_access_users_permissions ON (ninja_access_permissions.id = ninja_access_users_permissions.permission_id)
-
           LEFT JOIN ninja_access_groups_permissions ON (ninja_access_permissions.id = ninja_access_groups_permissions.permission_id)
           LEFT JOIN ninja_access_groups AS groups ON (ninja_access_groups_permissions.group_id = groups.id)
           LEFT JOIN ninja_access_groups_users AS users ON (groups.id = users.group_id)
@@ -23,10 +20,7 @@ module NinjaAccess::ActsAsNinjaAccessible
 
         where_sql = <<-HERE
           ninja_access_permissions.action = '#{supported_action}'
-          AND (
-            ninja_access_users_permissions.user_id = #{user.id}
-            OR users.user_id = #{user.id}
-          )
+          AND users.user_id = #{user.id}
           OR #{user.id} IN (#{NinjaAccess.query_for_super_user_ids})
         HERE
 
@@ -78,17 +72,6 @@ module NinjaAccess::ActsAsNinjaAccessible
       groups.each { |g| grant_permission_to_group(action, g) }
     end
 
-    def grant_permission_to_user(action, user)
-      action = action.to_s
-      permission = get_my_permission_for_action(action)
-      permission.users << user if not permission.users.include?(user)
-      permission.save!
-    end
-
-    def grant_permission_to_users(action, users)
-      users.each { |u| grant_permission_to_user(action, u) }
-    end
-
     def revoke_permission_from_group(action, group)
       action = action.to_s
       permission = get_my_permission_for_action(action)
@@ -98,17 +81,6 @@ module NinjaAccess::ActsAsNinjaAccessible
 
     def revoke_permission_from_groups(action, groups)
       groups.each { |g| revoke_permission_from_group(action, g) }
-    end
-
-    def revoke_permission_from_user(action, user)
-      action = action.to_s
-      permission = get_my_permission_for_action(action)
-      permission.users.delete user
-      permission.save!
-    end
-
-    def revoke_permission_from_users(action, users)
-      users.each { |u| revoke_permission_from_user(action, u) }
     end
 
     NinjaAccess::supported_actions.each do |supported_action|

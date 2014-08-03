@@ -39,7 +39,8 @@ describe NinjaAccess::ActsAsNinjaAccessible do
         describe "##{method_name}" do
           before :all do
             resource.permissions.delete_all
-            resource.grant_permission_to_user(supported_action, user)
+            group.add_user(user)
+            resource.grant_permission_to_group(supported_action, group)
           end
 
           it "should return false if the user is nil" do
@@ -139,30 +140,6 @@ describe NinjaAccess::ActsAsNinjaAccessible do
         end
       end
 
-      it "should include method '#grant_permission_to_user'" do
-        resource.should respond_to(:grant_permission_to_user)
-      end
-
-      describe "#grant_permission_to_user" do
-        NinjaAccess.supported_actions.each do |supported_action|
-          describe "for an action of '#{supported_action}'" do
-            it "should add and remove '#{supported_action}' permission to the appropriate user" do
-              user.ninja_access_permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 0
-              resource.grant_permission_to_user(supported_action, user)
-              user.ninja_access_permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 1
-              resource.revoke_permission_from_user(supported_action, user)
-              user.ninja_access_permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 0
-            end
-            it "should not add '#{supported_action}' permission twice to the appropriate user" do
-              user.ninja_access_permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 0
-              resource.grant_permission_to_user(supported_action, user)
-              resource.grant_permission_to_user(supported_action, user)
-              user.ninja_access_permissions.for_instance(resource).actionable(supported_action.to_s).size.should eq 1
-            end
-          end
-        end
-      end
-
       it "should include method '#grant_permission_to_groups'" do
         resource.should respond_to(:grant_permission_to_groups)
       end
@@ -174,37 +151,6 @@ describe NinjaAccess::ActsAsNinjaAccessible do
           resource.should_receive(:grant_permission_to_group).with("test", group_a)
           resource.should_receive(:grant_permission_to_group).with("test", group_b)
           resource.grant_permission_to_groups("test", [group_a, group_b])
-        end
-      end
-
-      describe "#grant_permission_to_users" do
-
-        it "should include method '#grant_permission_to_users'" do
-          resource.should respond_to(:grant_permission_to_users)
-        end
-
-        it "should issue #grant_permission_to_user for each user passed" do
-          user_a = double("user_a")
-          user_b = double("user_b")
-          resource.should_receive(:grant_permission_to_user).with("test", user_a)
-          resource.should_receive(:grant_permission_to_user).with("test", user_b)
-          resource.grant_permission_to_users("test", [user_a, user_b])
-        end
-      end
-
-      describe "#revoke_permission_from_users" do
-        it "should include method '#revoke_permission_from_users'" do
-          resource.should respond_to(:revoke_permission_from_users)
-        end
-
-        describe "#revoke_permission_from_users" do
-          it "should issue #revoke_permission_from_user for each user passed" do
-            user_a = double("user_a")
-            user_b = double("user_b")
-            resource.should_receive(:revoke_permission_from_user).with("test", user_a)
-            resource.should_receive(:revoke_permission_from_user).with("test", user_b)
-            resource.revoke_permission_from_users("test", [user_a, user_b])
-          end
         end
       end
 
@@ -223,10 +169,7 @@ describe NinjaAccess::ActsAsNinjaAccessible do
           end
         end
       end
-
-
     end
-
   end
 
   describe "where class has not be marked as 'acts_as_ninja_accessible'" do
@@ -266,10 +209,6 @@ describe NinjaAccess::ActsAsNinjaAccessible do
 
       it "should not include method '#grant_permission_to_group'" do
         no_access_resource.should_not respond_to(:grant_permission_to_group)
-      end
-
-      it "should not include method '#grant_permission_to_user'" do
-        no_access_resource.should_not respond_to(:grant_permission_to_user)
       end
 
     end
