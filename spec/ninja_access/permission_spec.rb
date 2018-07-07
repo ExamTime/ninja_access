@@ -52,7 +52,7 @@ describe NinjaAccess::Permission do
 
       describe "#{scope_name}" do
         it "should filter permissions on the '#{supported_action}' action" do
-          NinjaAccess::Permission.send(scope_name).where_values_hash.should == {:action => supported_action}
+          NinjaAccess::Permission.send(scope_name).where_values_hash.should == {"action" => supported_action}
         end
 
         it "should only return '#{scope_name}' permissions with the #{scope_name} scope" do
@@ -78,7 +78,7 @@ describe NinjaAccess::Permission do
     end
 
     it "should filter permissions on the accessible_type" do
-      NinjaAccess::Permission.for_type("ResourceA").where_values_hash.should == {:accessible_type => "ResourceA"}
+      NinjaAccess::Permission.for_type("ResourceA").where_values_hash.should == {"accessible_type" => "ResourceA"}
     end
 
     it "should only return permissions of specified type with the for_type scope" do

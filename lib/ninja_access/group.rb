@@ -8,8 +8,6 @@
 #
 class NinjaAccess::Group < ActiveRecord::Base
   # Each group is created with a name - uniqueness of this name is not enforced
-  attr_accessible :name
-
   validates_presence_of :name
 
   has_and_belongs_to_many :users,

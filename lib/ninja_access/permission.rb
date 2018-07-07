@@ -12,8 +12,6 @@
 # require that the model instance is solely responsible for granting permissions to itself.
 #
 class NinjaAccess::Permission < ActiveRecord::Base
-  attr_accessible :action
-
   validates_presence_of :accessible
   validates_presence_of :action
   validates_uniqueness_of :action, :scope => [:accessible_type, :accessible_id]
