@@ -23,7 +23,7 @@ describe NinjaAccess::Permission do
       end
     end
 
-    [:view, "nuke", "inflate", "$%^", ""].each do |unsupported_action|
+    [:vue, "nuke", "inflate", "$%^", ""].each do |unsupported_action|
       context "when action is '#{unsupported_action}'" do
         it "should be invalid" do
           build(:ninja_access_permission, :action => unsupported_action).should_not be_valid
