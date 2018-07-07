@@ -2,3 +2,4 @@
 spec/dummy/log/*
 tmp/*
 nbproject/*
+bin/*

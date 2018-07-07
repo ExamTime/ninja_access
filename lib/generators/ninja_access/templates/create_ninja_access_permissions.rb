@@ -24,25 +24,9 @@ class CreateNinjaAccessPermissions < ActiveRecord::Migration
     add_foreign_key :ninja_access_groups_permissions,
                     :ninja_access_permissions,
                     :column => :permission_id
-
-
-    create_table :ninja_access_users_permissions do |t|
-      t.column "user_id", :integer
-      t.column "permission_id", :integer
-    end
-    add_index :ninja_access_users_permissions,
-              [:user_id, :permission_id],
-              :unique => true,
-              :name => "index_na_users_permissions_on_user_id_and_permission_id"
-    add_foreign_key :ninja_access_users_permissions,
-                    :users
-    add_foreign_key :ninja_access_users_permissions,
-                    :ninja_access_permissions,
-                    :column => :permission_id
   end
 
   def self.down
-    drop_table :ninja_access_users_permissions
     drop_table :ninja_access_groups_permissions
     drop_table :ninja_access_permissions
   end

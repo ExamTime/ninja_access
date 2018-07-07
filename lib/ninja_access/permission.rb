@@ -6,22 +6,18 @@
 #   * action defines the user action that this permission represents (e.g. view, edit, delete, extend)
 #
 # With a permission created the model will only be made accessible when this permission is 'granted'
-# to either a group or a user.
+# to a group. At that point, the permission will be inferred for all members of that group.
 #
-# At present we do not offer a way for a Permission to grant itself to any user or group.  Instead, we
-# require that the model instance is solely responsible to for granting permissions to itself.
+# At present we do not offer a way for a Permission to grant itself to any group.  Instead, we
+# require that the model instance is solely responsible for granting permissions to itself.
 #
 class NinjaAccess::Permission < ActiveRecord::Base
-  attr_accessible :action
-
   validates_presence_of :accessible
   validates_presence_of :action
   validates_uniqueness_of :action, :scope => [:accessible_type, :accessible_id]
   validate :action_is_supported?
 
   belongs_to :accessible, :polymorphic => true
-  has_and_belongs_to_many :users,
-                          :join_table => "ninja_access_users_permissions"
   has_and_belongs_to_many :groups,
                           :class_name => "NinjaAccess::Group",
                           :join_table => "ninja_access_groups_permissions"

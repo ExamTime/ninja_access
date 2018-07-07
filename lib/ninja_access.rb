@@ -18,5 +18,4 @@ end
 require 'ninja_access/acts_as_ninja_accessible'
 require 'ninja_access/permission'
 require 'ninja_access/group'
-require 'ninja_access/sub_group'
 require 'ninja_access/extensions'

@@ -2,10 +2,11 @@ require 'rails/generators/migration'
 
 module NinjaAccess
   module Generators
-    class InstallGenerator < ::Rails::Generators::Base
+    class SlimDownGenerator < ::Rails::Generators::Base
       include Rails::Generators::Migration
       source_root File.expand_path('../../templates', __FILE__)
-      desc "Adding the ninja_access migrations to the host app"
+      puts File.expand_path('../../templates', __FILE__)
+      desc "Adding the new ninja_access migrations to the host app"
 
       def self.next_migration_number(path)
         unless @prev_migration_nr
@@ -17,10 +18,8 @@ module NinjaAccess
       end
 
       def copy_migrations
-        migration_template "create_ninja_access_groups.rb", "db/migrate/create_ninja_access_groups.rb"
-        migration_template "create_ninja_access_permissions.rb", "db/migrate/create_ninja_access_permissions.rb"
-        template "ninja_access.rb", "config/initializers/ninja_access.rb"
-        template "ninja_access.en.yml", "config/locales/ninja_access.en.yml"
+        migration_template "drop_ninja_access_sub_groups.rb", "db/migrate/drop_ninja_access_sub_groups.rb"
+        migration_template "drop_ninja_access_users_permissions.rb", "db/migrate/drop_ninja_access_users_permissions.rb"
       end
     end
   end
