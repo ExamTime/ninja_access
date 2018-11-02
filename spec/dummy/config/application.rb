@@ -4,7 +4,6 @@ require 'rails/all'
 
 Bundler.require
 require "ninja_access"
-require "foreigner"
 
 module Dummy
   class Application < Rails::Application

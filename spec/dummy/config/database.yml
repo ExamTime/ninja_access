@@ -4,8 +4,8 @@ development:
   reconnect: false
   database: ninja_access_development
   pool: 5
-  username: edvance
-  password: s2cr2t
+  username: root
+  password:
   socket: /var/run/mysqld/mysqld.sock
 
 test: 
@@ -14,6 +14,6 @@ test:
   reconnect: false
   database: ninja_access_test
   pool: 5
-  username: edvance
-  password: s2cr2t
+  username:
+  password:
   socket: /var/run/mysqld/mysqld.sock
