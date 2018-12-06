@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     ninja_access (0.1.0)
-      rails (>= 3.2.8, <= 4.2.10)
+      rails (>= 3.2.8, < 5.0)
 
 GEM
   remote: http://rubygems.org/
