@@ -1,4 +1,4 @@
-class CreateNinjaAccessSubGroups < ActiveRecord::Migration
+class CreateNinjaAccessSubGroups < ActiveRecord::Migration[4.2]
   def self.up
     create_table :ninja_access_sub_groups do |t|
       t.integer :parent_id, :null => false

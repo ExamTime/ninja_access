@@ -12,7 +12,7 @@ module NinjaAccess::ActsAsNinjaAccessible
       scope scope_name, lambda { |user|
         join_sql = <<-HERE
           LEFT JOIN ninja_access_permissions ON (ninja_access_permissions.accessible_id = #{table_name}.id
-                                                  AND ninja_access_permissions.accessible_type = '#{self.to_s}')
+                                                  AND ninja_access_permissions.accessible_type = '#{model.to_s}')
           LEFT JOIN ninja_access_groups_permissions ON (ninja_access_permissions.id = ninja_access_groups_permissions.permission_id)
           LEFT JOIN ninja_access_groups AS groups ON (ninja_access_groups_permissions.group_id = groups.id)
           LEFT JOIN ninja_access_groups_users AS users ON (groups.id = users.group_id)
@@ -34,7 +34,7 @@ module NinjaAccess::ActsAsNinjaAccessible
       scope_name = "#{supported_action}able_by_group".to_sym
       scope scope_name, lambda { |group|
         joins("INNER JOIN ninja_access_permissions ON (ninja_access_permissions.accessible_id = #{table_name}.id
-                                                     AND ninja_access_permissions.accessible_type = '#{self.to_s}')
+                                                     AND ninja_access_permissions.accessible_type = '#{model.to_s}')
            INNER JOIN ninja_access_groups_permissions ON (ninja_access_permissions.id = ninja_access_groups_permissions.permission_id)
            INNER JOIN ninja_access_groups AS groups ON (ninja_access_groups_permissions.group_id = groups.id)
           ")

@@ -1,4 +1,4 @@
-class DropNinjaAccessSubGroups < ActiveRecord::Migration
+class DropNinjaAccessSubGroups < ActiveRecord::Migration[4.2]
   def self.up
     drop_table :ninja_access_sub_groups
   end

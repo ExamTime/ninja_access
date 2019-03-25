@@ -1,4 +1,4 @@
-class DropNinjaAccessUsersPermissions < ActiveRecord::Migration
+class DropNinjaAccessUsersPermissions < ActiveRecord::Migration[4.2]
   def self.up
     drop_table :ninja_access_users_permissions
   end
