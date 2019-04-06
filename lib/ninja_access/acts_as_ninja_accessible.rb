@@ -43,7 +43,7 @@ module NinjaAccess::ActsAsNinjaAccessible
         .where("
            ninja_access_permissions.action = '#{supported_action}'
            AND groups.id = #{group.id}")
-        .uniq
+        .distinct
       }
 
     end
