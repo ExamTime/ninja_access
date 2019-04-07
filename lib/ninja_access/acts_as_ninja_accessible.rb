@@ -29,7 +29,7 @@ module NinjaAccess::ActsAsNinjaAccessible
           where_sql += " OR #{user.id} IN (#{NinjaAccess.query_for_super_user_ids}) " 
         end
 
-        joins(join_sql).where(where_sql).uniq
+        joins(join_sql).where(where_sql).distinct
       }
 
 
