@@ -4,7 +4,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../dummy/config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/matchers'
-require 'factory_girl_rails'
+require 'factory_bot_rails'
 require 'byebug'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -40,8 +40,8 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 
-  # Allow for direct, non-qualified, reference to FactoryGirl methods
-  config.include FactoryGirl::Syntax::Methods
+  # Allow for direct, non-qualified, reference to FactoryBot methods
+  config.include FactoryBot::Syntax::Methods
 
   # Allow for test focusing within spec file
   config.treat_symbols_as_metadata_keys_with_true_values = true
