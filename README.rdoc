@@ -104,6 +104,6 @@ Chose those models whose access you wish to restrict and add the following
   2. cd ninja_access
   3. bundle install
   4. cd spec/dummy
-  5. rake db:create && rake db:migrate && rake db:test:prepare
+  5. bundle exec rake db:create && bundle exec rake db:migrate && bundle exec rake db:test:prepare
   6. cd ../..
   7. bundle exec rake
