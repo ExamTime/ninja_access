@@ -1,4 +1,4 @@
-class CreateNinjaAccessGroups < ActiveRecord::Migration
+class CreateNinjaAccessGroups < ActiveRecord::Migration[4.2]
   def change
     create_table :ninja_access_groups do |t|
       t.column "name", :string, :limit => 255

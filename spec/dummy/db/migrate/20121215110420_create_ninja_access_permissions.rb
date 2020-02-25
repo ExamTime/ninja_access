@@ -1,4 +1,4 @@
-class CreateNinjaAccessPermissions < ActiveRecord::Migration
+class CreateNinjaAccessPermissions < ActiveRecord::Migration[4.2]
   def change
     create_table :ninja_access_permissions do |t|
       t.string :action, :null => false

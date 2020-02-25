@@ -8,11 +8,13 @@ module NinjaAccess::ActsAsNinjaAccessible
                :dependent => :destroy
 
     NinjaAccess::supported_actions.each do |supported_action|
+      model_name = self.to_s
+
       scope_name = "#{supported_action}able_by".to_sym
       scope scope_name, lambda { |user|
         join_sql = <<-HERE
           LEFT JOIN ninja_access_permissions ON (ninja_access_permissions.accessible_id = #{table_name}.id
-                                                  AND ninja_access_permissions.accessible_type = '#{self.to_s}')
+                                                  AND ninja_access_permissions.accessible_type = '#{model_name}')
           LEFT JOIN ninja_access_groups_permissions ON (ninja_access_permissions.id = ninja_access_groups_permissions.permission_id)
           LEFT JOIN ninja_access_groups AS groups ON (ninja_access_groups_permissions.group_id = groups.id)
           LEFT JOIN ninja_access_groups_users AS users ON (groups.id = users.group_id)
@@ -27,21 +29,21 @@ module NinjaAccess::ActsAsNinjaAccessible
           where_sql += " OR #{user.id} IN (#{NinjaAccess.query_for_super_user_ids}) " 
         end
 
-        joins(join_sql).where(where_sql).uniq
+        joins(join_sql).where(where_sql).distinct
       }
 
 
       scope_name = "#{supported_action}able_by_group".to_sym
       scope scope_name, lambda { |group|
         joins("INNER JOIN ninja_access_permissions ON (ninja_access_permissions.accessible_id = #{table_name}.id
-                                                     AND ninja_access_permissions.accessible_type = '#{self.to_s}')
+                                                     AND ninja_access_permissions.accessible_type = '#{model_name}')
            INNER JOIN ninja_access_groups_permissions ON (ninja_access_permissions.id = ninja_access_groups_permissions.permission_id)
            INNER JOIN ninja_access_groups AS groups ON (ninja_access_groups_permissions.group_id = groups.id)
           ")
         .where("
            ninja_access_permissions.action = '#{supported_action}'
            AND groups.id = #{group.id}")
-        .uniq
+        .distinct
       }
 
     end
