@@ -23,5 +23,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "byebug"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "capybara"
-  s.add_development_dependency "factory_girl_rails"
+  s.add_development_dependency "factory_bot_rails"
 end

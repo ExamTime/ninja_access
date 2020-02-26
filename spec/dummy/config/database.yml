@@ -7,7 +7,7 @@ development:
   host: 127.0.0.1
   port: 3307
   username: root
-  password: tootyrooty
+  password: <root password>
 
 test: 
   adapter: mysql2
@@ -18,4 +18,4 @@ test:
   host: 127.0.0.1
   port: 3307
   username: root
-  password: tootyrooty
+  password: <root password>
