@@ -17,8 +17,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", ">= 3.2.8", "< 7.0"
 
-  s.add_development_dependency "mysql2", "~> 0.5.2"
-  s.add_development_dependency "rake", "~> 11.2.2"
+  s.add_development_dependency "mysql2"
+  s.add_development_dependency "rake"
   s.add_development_dependency "test-unit"
   s.add_development_dependency "byebug"
   s.add_development_dependency "rspec-rails"
