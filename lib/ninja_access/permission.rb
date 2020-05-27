@@ -14,7 +14,9 @@
 class NinjaAccess::Permission < ActiveRecord::Base
   validates_presence_of :accessible
   validates_presence_of :action
-  validates_uniqueness_of :action, :scope => [:accessible_type, :accessible_id]
+  validates_uniqueness_of :action, 
+    :case_sensitive => true,
+    :scope => [:accessible_type, :accessible_id]
   validate :action_is_supported?
 
   belongs_to :accessible, :polymorphic => true
