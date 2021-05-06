@@ -107,3 +107,9 @@ Chose those models whose access you wish to restrict and add the following
   5. bundle exec rake db:create && bundle exec rake db:migrate && bundle exec rake db:test:prepare
   6. cd ../..
   7. bundle exec rake
+
+NB You will need to set you root MySQL password in the file `spec/dummy/config/database.yml`, but you should not check these changes into source control:
+
+```
+  > git update-index --assume-unchanged spec/dummy/config/database.yml
+```
