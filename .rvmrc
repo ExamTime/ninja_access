@@ -4,6 +4,6 @@ if [ "${RAILS_ENV}" != "" ]; then
   echo "WARNING: RAILS_ENV was set to '${RAILS_ENV}'. Unsetting..."
   export RAILS_ENV=""
 fi
-rvm --create use 2.6.6@ninja_access
+rvm --create use 2.6.8@ninja_access
 hash -r
 bundle check
