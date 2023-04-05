@@ -94,8 +94,8 @@ describe NinjaAccess::Group do
 
       context "an array of users are supplied" do
         it "should invoke '#add_user' for each of the supplied users" do
-          @group.should_receive(:add_user).with(@user_1)
-          @group.should_receive(:add_user).with(@user_2)
+          expect(@group).to receive(:add_user).with(@user_1)
+          expect(@group).to receive(:add_user).with(@user_2)
           @group.add_users([@user_1, @user_2])
         end
 
