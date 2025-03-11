@@ -10,12 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2014_08_03_142052) do
-
+ActiveRecord::Schema[7.0].define(version: 2014_08_03_142052) do
   create_table "ninja_access_groups", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "ninja_access_groups_permissions", id: :integer, charset: "utf8", force: :cascade do |t|
@@ -36,32 +35,32 @@ ActiveRecord::Schema.define(version: 2014_08_03_142052) do
     t.string "action", null: false
     t.string "accessible_type"
     t.integer "accessible_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["accessible_id", "accessible_type", "action"], name: "index_na_permissions_on_accessible_and_action", unique: true
   end
 
   create_table "resource_as", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "resource_bs", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "resource_cs", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "users", id: :integer, charset: "utf8", force: :cascade do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   add_foreign_key "ninja_access_groups_permissions", "ninja_access_groups", column: "group_id"
