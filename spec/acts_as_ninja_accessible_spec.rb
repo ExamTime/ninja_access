@@ -28,7 +28,7 @@ describe NinjaAccess::ActsAsNinjaAccessible do
       NinjaAccess::supported_actions.each do |supported_action|
         ["#{supported_action}able_by".to_sym, "#{supported_action}able_by_group".to_sym].each do |scope_name|
           it "should include class method '#{scope_name}'" do
-            ResourceA.should respond_to(scope_name)
+            expect(ResourceA).to respond_to(scope_name)
           end
         end
 
@@ -199,8 +199,8 @@ describe NinjaAccess::ActsAsNinjaAccessible do
         it "should issue #grant_permission_to_@group for each group passed" do
           group_a = double("group_a")
           group_b = double("group_b")
-          @resource.should_receive(:grant_permission_to_group).with("test", group_a)
-          @resource.should_receive(:grant_permission_to_group).with("test", group_b)
+          expect(@resource).to receive(:grant_permission_to_group).with("test", group_a)
+          expect(@resource).to receive(:grant_permission_to_group).with("test", group_b)
           @resource.grant_permission_to_groups("test", [group_a, group_b])
         end
       end
@@ -214,8 +214,8 @@ describe NinjaAccess::ActsAsNinjaAccessible do
           it "should issue #revoke_permission_from_@group for each user passed" do
             user_a = double("user_a")
             user_b = double("user_b")
-            @resource.should_receive(:revoke_permission_from_group).with("test", user_a)
-            @resource.should_receive(:revoke_permission_from_group).with("test", user_b)
+            expect(@resource).to receive(:revoke_permission_from_group).with("test", user_a)
+            expect(@resource).to receive(:revoke_permission_from_group).with("test", user_b)
             @resource.revoke_permission_from_groups("test", [user_a, user_b])
           end
         end
