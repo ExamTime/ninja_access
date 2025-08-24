@@ -16,8 +16,8 @@ module NinjaAccess::ActsAsNinjaAccessible
           LEFT JOIN ninja_access_permissions ON (ninja_access_permissions.accessible_id = #{table_name}.id
                                                   AND ninja_access_permissions.accessible_type = '#{model_name}')
           LEFT JOIN ninja_access_groups_permissions ON (ninja_access_permissions.id = ninja_access_groups_permissions.permission_id)
-          LEFT JOIN ninja_access_groups AS groups ON (ninja_access_groups_permissions.group_id = groups.id)
-          LEFT JOIN ninja_access_groups_users AS users ON (groups.id = users.group_id)
+          LEFT JOIN ninja_access_groups AS `groups` ON (ninja_access_groups_permissions.group_id = `groups`.id)
+          LEFT JOIN ninja_access_groups_users AS users ON (`groups`.id = users.group_id)
         HERE
 
         where_sql = <<-HERE
@@ -38,11 +38,11 @@ module NinjaAccess::ActsAsNinjaAccessible
         joins("INNER JOIN ninja_access_permissions ON (ninja_access_permissions.accessible_id = #{table_name}.id
                                                      AND ninja_access_permissions.accessible_type = '#{model_name}')
            INNER JOIN ninja_access_groups_permissions ON (ninja_access_permissions.id = ninja_access_groups_permissions.permission_id)
-           INNER JOIN ninja_access_groups AS groups ON (ninja_access_groups_permissions.group_id = groups.id)
+           INNER JOIN ninja_access_groups AS `groups` ON (ninja_access_groups_permissions.group_id = `groups`.id)
           ")
         .where("
            ninja_access_permissions.action = '#{supported_action}'
-           AND groups.id = #{group.id}")
+           AND `groups`.id = #{group.id}")
         .distinct
       }
 

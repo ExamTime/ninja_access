@@ -10,28 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2014_08_03_142052) do
-  create_table "ninja_access_groups", id: :integer, charset: "utf8", force: :cascade do |t|
+ActiveRecord::Schema[7.2].define(version: 2014_08_03_142052) do
+  create_table "ninja_access_groups", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
   end
 
-  create_table "ninja_access_groups_permissions", id: :integer, charset: "utf8", force: :cascade do |t|
+  create_table "ninja_access_groups_permissions", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "group_id"
     t.integer "permission_id"
     t.index ["group_id", "permission_id"], name: "index_na_groups_permissions_on_group_id_and_permission_id", unique: true
     t.index ["permission_id"], name: "fk_rails_f1d88100a5"
   end
 
-  create_table "ninja_access_groups_users", id: :integer, charset: "utf8", force: :cascade do |t|
+  create_table "ninja_access_groups_users", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "group_id"
     t.integer "user_id"
     t.index ["group_id", "user_id"], name: "index_na_groups_users_on_group_id_and_user_id", unique: true
     t.index ["user_id"], name: "fk_rails_fcbc2b3794"
   end
 
-  create_table "ninja_access_permissions", id: :integer, charset: "utf8", force: :cascade do |t|
+  create_table "ninja_access_permissions", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.string "action", null: false
     t.string "accessible_type"
     t.integer "accessible_id"
@@ -40,25 +40,25 @@ ActiveRecord::Schema[7.0].define(version: 2014_08_03_142052) do
     t.index ["accessible_id", "accessible_type", "action"], name: "index_na_permissions_on_accessible_and_action", unique: true
   end
 
-  create_table "resource_as", id: :integer, charset: "utf8", force: :cascade do |t|
+  create_table "resource_as", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
   end
 
-  create_table "resource_bs", id: :integer, charset: "utf8", force: :cascade do |t|
+  create_table "resource_bs", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
   end
 
-  create_table "resource_cs", id: :integer, charset: "utf8", force: :cascade do |t|
+  create_table "resource_cs", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
   end
 
-  create_table "users", id: :integer, charset: "utf8", force: :cascade do |t|
+  create_table "users", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
   end
