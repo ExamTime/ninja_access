@@ -149,6 +149,7 @@ GEM
     nokogiri (1.19.2)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
+    observer (0.1.2)
     power_assert (2.0.3)
     pp (0.6.3)
       prettyprint
@@ -159,7 +160,7 @@ GEM
       stringio
     public_suffix (5.0.1)
     racc (1.8.1)
-    rack (3.2.5)
+    rack (3.2.6)
     rack-session (2.1.1)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
@@ -250,9 +251,10 @@ DEPENDENCIES
   factory_bot_rails
   mysql2
   ninja_access!
+  observer
   rake
   rspec-rails
   test-unit
 
 BUNDLED WITH
-   2.2.33
+  4.0.11
