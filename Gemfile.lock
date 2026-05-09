@@ -103,7 +103,7 @@ GEM
     date (3.5.1)
     diff-lcs (1.6.0)
     drb (2.2.3)
-    erb (6.0.2)
+    erb (6.0.4)
     erubi (1.13.1)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
@@ -136,7 +136,7 @@ GEM
     mini_portile2 (2.8.9)
     minitest (5.27.0)
     mysql2 (0.5.5)
-    net-imap (0.6.3)
+    net-imap (0.6.4)
       date
       net-protocol
     net-pop (0.1.2)
